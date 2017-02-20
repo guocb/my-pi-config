@@ -9,4 +9,15 @@ class nas {
         require => Package["samba"],
         subscribe => File["samba.conf"]
     }
+
+	# spin down disks when idle
+	$disks = ['/dev/sda', '/dev/sdb']
+	package {["hdparm"]: }
+	file { "/etc/hdparm.conf":
+		content => template("nas/hdparm.conf.erb"),
+	}
+	service { "hdparm":
+		require => Package['hdparm'],
+		subscribe => File['/etc/hdparm.conf']
+	}
 }
