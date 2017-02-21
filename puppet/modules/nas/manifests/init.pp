@@ -20,4 +20,13 @@ class nas {
 		require => Package['hdparm'],
 		subscribe => File['/etc/hdparm.conf']
 	}
+
+    # mount usb disks
+    file {['/mnt/new', '/mnt/old/c', '/mnt/old/d', '/mnt/old/e', '/mnt/old/f',
+            '/mnt/old/g', '/mnt/old/h']:
+        ensure => directory,
+    }
+    file {'/etc/fstab':
+        source => 'puppet:///modules/nas/fstab'
+    }
 }
