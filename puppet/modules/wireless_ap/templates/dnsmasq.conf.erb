@@ -7,4 +7,4 @@ domain-needed        # Don't forward short names
 bogus-priv           # Never forward addresses in the non-routed address spaces.  
 
 # Assign IP addresses between the range and with a lease time  
-dhcp-range=<% @dhcp_start -%>,<% @dhcp_end -%>,<% @dhcp_expir -%>
+dhcp-range=<%= @dhcp_start -%>,<%= @dhcp_end -%>,<%= @dhcp_expir -%>

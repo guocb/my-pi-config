@@ -8,6 +8,7 @@ class wireless_ap {
 		content => template('wireless_ap/hostapd.conf.erb')
 	}
     service { "hostapd":
+        ensure => running,
 		require => Package['hostapd'],
 		subscribe => File['hostapd.conf']
 	}
@@ -24,6 +25,7 @@ class wireless_ap {
 		source => 'puppet:///modules/wireless_ap/dnsmasq.default'
 	}
     service { "dnsmasq":
+        ensure => running,
 		require => Package['dnsmasq'],
 		subscribe => File['dnsmasq.conf', 'dnsmasq.default']
 	}
@@ -36,6 +38,17 @@ class wireless_ap {
 	service { 'dhcpcd':
 		subscribe => File['dhcpcd.conf']
 	}
+    file {
+        'wlan0':
+                path => '/etc/network/interfaces.d/wlan0',
+                source => 'puppet:///modules/wireless_ap/wlan0';
+        'interfaces':
+                path => '/etc/network/interfaces',
+                source => 'puppet:///modules/wireless_ap/interfaces';
+    }
+    service {'networking':
+        subscribe => File['wlan0', 'interfaces'],
+    }
 	# ipv4 forwarding
 	exec {'ipv4_forward':
 		command => 'sysctl -w net.ipv4.ip_forward=1',
@@ -46,9 +59,10 @@ class wireless_ap {
 		path => '/etc/iptables.ipv4.nat',
 		source => 'puppet:///modules/wireless_ap/iptables.ipv4.nat'
 	}
-	cron {'restore_iptables':
-		command => 'iptables-restore < /etc/iptables.ipv4.nat',
-		special => 'reboot',
-		user => 'root',
-	}
+    file { '/etc/network/if-up.d/firewall':
+        mode => 0755,
+        owner => root,
+        group => root,
+        content => "#!/usr/bin/env bash\niptables-restore < /etc/iptables.ipv4.nat\n",
+    }
 }

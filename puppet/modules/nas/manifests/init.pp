@@ -22,7 +22,7 @@ class nas {
 	}
 
     # mount usb disks
-    file {['/mnt/new', '/mnt/old/c', '/mnt/old/d', '/mnt/old/e', '/mnt/old/f',
+    file {['/mnt/new', '/mnt/old', '/mnt/old/c', '/mnt/old/d', '/mnt/old/e', '/mnt/old/f',
             '/mnt/old/g', '/mnt/old/h']:
         ensure => directory,
     }
