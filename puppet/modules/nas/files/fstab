@@ -3,3 +3,10 @@ proc            /proc           proc    defaults          0       0
 /dev/mmcblk0p2  /               ext4    defaults,noatime  0       1
 # a swapfile is not a swap partition, no line here
 #   use  dphys-swapfile swap[on|off]  for that
+UUID=FC38DB5A38DB128E   /mnt/new        ntfs    auto,defaults,noatime,nofail   0   0
+UUID="660C56A90C5673D1" /mnt/old/c      ntfs    auto,defaults,noatime,nofail   0   0
+UUID="AE34570B3456D645" /mnt/old/d      ntfs    auto,defaults,noatime,nofail   0   0
+UUID="6C445FB8445F842C" /mnt/old/e      ntfs    auto,defaults,noatime,nofail   0   0
+UUID="CEBC6905BC68EA03" /mnt/old/f      ntfs    auto,defaults,noatime,nofail   0   0
+UUID="08282038282026E2" /mnt/old/g      ntfs    auto,defaults,noatime,nofail   0   0
+UUID="841CBFBC1CBFA816" /mnt/old/h      ntfs    auto,defaults,noatime,nofail   0   0
