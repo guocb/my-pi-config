@@ -252,11 +252,22 @@
 # to the drivers directory for these users to have write rights in it
 ;   write list = root, @lpadmin
 
-[Backup]
-comment = Backup Folder
-path = /media/USBHDD1/shares
-valid users = @users
-force group = users
+[nas_new]
+comment = new usb disk
+path = /mnt/new
+valid users = <%= @samba_user %>
+force group = nas
 create mask = 0660
 directory mask = 0771
 read only = no
+guest ok = no
+
+[nas_old]
+comment = old usb disk
+path = /mnt/old
+valid users = <%= @samba_user %>
+force group = nas
+create mask = 0660
+directory mask = 0771
+read only = no
+guest ok = no
