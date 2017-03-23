@@ -26,6 +26,10 @@ echo Allow loopback access
 $IPT -A INPUT -i lo -j ACCEPT
 $IPT -A OUTPUT -o lo -j ACCEPT
 
+echo Allow internal access
+$IPT -A INPUT -i wlan0 -j ACCEPT
+$IPT -A OUTPUT -o wlan0 -j ACCEPT
+
 echo Allow outbound DNS
 $IPT -A OUTPUT -p udp -o eth0 --dport 53 -j ACCEPT
 $IPT -A INPUT -p udp -i eth0 --sport 53 -j ACCEPT
