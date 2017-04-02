@@ -1,6 +1,18 @@
 IPT=/sbin/iptables
 $IPT -F
 
+if [ "$1" == 'clear' ] ; then
+	$IPT -P INPUT ACCEPT
+	$IPT -P FORWARD ACCEPT
+	$IPT -P OUTPUT ACCEPT
+	echo NAT
+	$IPT -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+	$IPT -A FORWARD -i wlan0 -o eth0 -j ACCEPT
+	$IPT -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+	exit 0
+fi
+
 $IPT -P INPUT DROP
 $IPT -P FORWARD DROP
 $IPT -P OUTPUT DROP
@@ -46,6 +58,10 @@ $IPT -A INPUT  -p udp --sport 123 -m state --state ESTABLISHED     -j ACCEPT
 
 echo Prevent DoS attack
 $IPT -A INPUT -i eth0 -p tcp --dport 80 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT
+
+echo transmission
+$IPT -A INPUT -m state --state RELATED,ESTABLISHED -p udp --dport 51413 -j ACCEPT
+$IPT -A OUTPUT -p udp --sport 51413 -j ACCEPT
 
 echo Log before dropping
 $IPT -A INPUT  -j LOG  -m limit --limit 12/min --log-level 4 --log-prefix 'IP INPUT drop: '
