@@ -24,6 +24,10 @@ class wireless_ap {
 		path => '/etc/default/dnsmasq',
 		source => 'puppet:///modules/wireless_ap/dnsmasq.default'
 	}
+    file {'hostapd.default':
+        path => '/etc/default/hostapd',
+        source => 'puppet:///modules/wireless_ap/hostapd.default'
+    }
     service { "dnsmasq":
         ensure => running,
 		require => Package['dnsmasq'],
