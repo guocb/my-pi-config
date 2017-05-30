@@ -57,12 +57,17 @@ class wireless_ap {
 	exec {'ipv4_forward':
 		command => 'sysctl -w net.ipv4.ip_forward=1',
 		path => ['/sbin', '/bin'],
-		onlyif => 'sysctl net.ipv4.ip_forward|grep "= 0"',
+		onlyif => 'test `cat /proc/sys/net/ipv4/ip_forward` -eq 0',
 	}
 	file {'iptables_rules':
 		path => '/etc/iptables.ipv4.nat',
 		source => 'puppet:///modules/wireless_ap/iptables.ipv4.nat'
 	}
+    exec { 'add ip forward to config':
+        command => 'echo net.ipv4.ip_forward = 1 >> /etc/sysctl.conf',
+	path => ['/sbin', '/bin'],
+	unless => 'grep -q "net.ipv4.ip_forward = 1" /etc/sysctl.conf',
+    }
     file { '/etc/network/if-up.d/firewall':
         mode => 0755,
         owner => root,
